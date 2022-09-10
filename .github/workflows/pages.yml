@@ -27,6 +27,9 @@ jobs:
       - name: Trunk Build
         run: |
           trunk build --release --public-url ${{ env.PUBLIC_URL }}
+      - name: Setup 404
+        run: |
+          cp dist/index.html dist/404.html
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
