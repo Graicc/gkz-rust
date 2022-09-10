@@ -51,6 +51,22 @@ impl fmt::Display for Column {
     }
 }
 
+impl Column {
+    fn is_right_align(&self) -> bool {
+        use Column::*;
+        match self {
+            ID => true,
+            User => false,
+            UserId => true,
+            Map => false,
+            MapId => true,
+            Time => true,
+            Checkpoint => true,
+            Date => true,
+        }
+    }
+}
+
 pub enum TableMessage {
     Response(Result<Vec<TableData>, String>),
 }
@@ -103,7 +119,7 @@ impl Component for Table {
                 .iter()
                 .map(|x| {
                     html! {
-                        <th>{x}</th>
+                        <th class={if x.is_right_align() {"right"} else {""}}>{x}</th>
                     }
                 })
                 .collect();
@@ -114,16 +130,16 @@ impl Component for Table {
                     {
                         self.columns.iter().map(|y| {
                             html! {
-                                <td> {
+                                <td class={if y.is_right_align() {"right"} else {""}}> {
                                     match *y {
                                         Column::ID => html! {x.id},
                                         Column::User => html! { <Link<Route> to={Route::User {id: x.user_id}}>{x.user.clone()}</Link<Route>> },
                                         Column::UserId => html! {x.user_id},
                                         Column::Map => html! { <Link<Route> to={Route::Map {id: x.map_id}}>{x.map.clone()}</Link<Route>> },
                                         Column::MapId => html! {x.map_id},
-                                        Column::Time => html! {x.time},
+                                        Column::Time => html! {format!("{:.3}", x.time)},
                                         Column::Checkpoint => html! {x.checkpoint},
-                                        Column::Date => html! {chrono::Utc.timestamp_millis(x.date).format("%y/%M/%d")},
+                                        Column::Date => html! {chrono::Utc.timestamp_millis(x.date).format("%Y/%m/%d")},
                                     }
                                 } </td>
                             }
