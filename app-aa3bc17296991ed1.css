@@ -112,6 +112,9 @@ th {
 }
 
 /* =========================== */
+
+/* Main Page Styles */
+
 .page {
     padding: 0;
     margin: 0;
@@ -179,3 +182,27 @@ footer {
     footer ul {
         flex: 33%;
     }
+
+/* =========================== */
+
+/* Monke img */
+
+.monke-img {
+    display: none;
+    position: absolute;
+    left: -50px;
+    /* z-index: -1; */
+    /*width: min(300px, 50vw);*/
+    /*width: calc(8vw * 2 + 0px);*/
+    /*width: 320px;*/
+    width: calc(50vw - 456px);
+    color: var(--primary-dark);
+}
+
+@media (min-width: 1050px) {
+    .monke-img {
+        /*display: block;*/
+        display: block;
+    }
+}
+Footer
