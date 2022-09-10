@@ -1,0 +1,181 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;700&display=swap');
+
+/* # General Styles */
+
+:root {
+    --primary-light: #F9F6F0;
+    --primary-dark: #293241;
+    /*--primary-dark: #180f03;*/
+    --secondary-light: #98C1D9;
+    --secondary-dark: #3D5A80;
+    --width: 1000px;
+}
+
+html, body {
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 16px;
+	margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+    font-weight: bold;
+    margin: inherit;
+}
+
+h1 {
+    font-size: 128px;
+}
+
+ul {
+    list-style-type: inherit;
+    padding: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+    a.subtle {
+        text-decoration: inherit;
+    }
+
+        a.subtle:hover {
+            font-weight: bold;
+        }
+
+th {
+    text-align: left;
+}
+
+/* # Utilities */
+
+.light {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+    .light a:hover {
+        color: var(--secondary-dark);
+    }
+
+.dark {
+    background-color: var(--primary-dark);
+    color: var(--primary-light);
+}
+
+    .dark a:hover {
+        color: var(--secondary-light);
+    }
+
+.round {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.right {
+    text-align: right;
+}
+
+.flex {
+    display: inline-flex;
+    align-items: center;
+}
+
+    .flex > * {
+        padding: 16px;
+    }
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.data-table {
+	overflow-x: auto;
+}
+
+.data-table table {
+    font-family: 'IBM Plex Mono', monospace;
+
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.data-table th, td {
+    padding: 10px 20px;
+}
+
+/* =========================== */
+.page {
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+nav {
+    height: 100px;
+}
+
+    nav > * {
+        /*padding: 16px;*/
+    }
+
+.nav-block {
+    height: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+}
+
+.nav-left {
+}
+
+.nav-right {
+    margin-left: auto;
+}
+
+    .nav-right li {
+        display: inline;
+        padding: 16px;
+    }
+
+.content {
+    /*padding-top: 1.1rem;*/
+    /*display: block;*/
+    max-width: 1000px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media (min-width: 1020px) {
+    .content {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+footer {
+    margin-top: auto;
+}
+
+    footer > .nav-block {
+        justify-content: center;
+        list-style-type: none;
+        align-items: baseline;
+        flex-wrap: wrap;
+    }
+
+    footer ul {
+        flex: 33%;
+    }
