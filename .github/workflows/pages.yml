@@ -1,0 +1,36 @@
+name: Github Pages
+on: 
+  push:
+    branches: [master,main,ci]
+    paths-ignore:
+      - '**.yml'
+      - '!.github/workflows/pages.yml'
+      - '**.md'
+      - '.gitignore'
+
+env:
+  PUBLIC_URL: /gkz-rust/
+
+jobs:
+  release-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Trunk
+        uses: jetli/trunk-action@v0.1.0
+        with:
+          version: "latest"
+      - name: Install wasm
+        run: |
+          rustup target add wasm32-unknown-unknown
+      - name: Trunk Build
+        run: |
+          trunk build --release --public-url ${{ env.PUBLIC_URL }}
+      - name: Setup 404
+        run: |
+          cp dist/index.html dist/404.html
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist

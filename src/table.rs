@@ -2,7 +2,10 @@ use chrono::{self, TimeZone};
 use reqwasm::http::Request;
 use serde::Deserialize;
 use yew::{html, Component, Context, Html};
+use yew_router::prelude::*;
 use std::fmt;
+
+use crate::Route;
 
 #[derive(Clone, PartialEq, Deserialize, Debug)]
 pub struct TableData {
@@ -44,6 +47,22 @@ impl fmt::Display for Column {
             Time => write!(f, "Time"),
             Checkpoint => write!(f, "Checkpoints"),
             Date => write!(f, "Date")
+        }
+    }
+}
+
+impl Column {
+    fn is_right_align(&self) -> bool {
+        use Column::*;
+        match self {
+            ID => true,
+            User => false,
+            UserId => true,
+            Map => false,
+            MapId => true,
+            Time => true,
+            Checkpoint => true,
+            Date => true,
         }
     }
 }
@@ -100,7 +119,7 @@ impl Component for Table {
                 .iter()
                 .map(|x| {
                     html! {
-                        <th>{x}</th>
+                        <th class={if x.is_right_align() {"right"} else {""}}>{x}</th>
                     }
                 })
                 .collect();
@@ -111,16 +130,16 @@ impl Component for Table {
                     {
                         self.columns.iter().map(|y| {
                             html! {
-                                <td> {
+                                <td class={if y.is_right_align() {"right"} else {""}}> {
                                     match *y {
-                                        Column::ID => x.id.to_string(),
-                                        Column::User => x.user.clone(),
-                                        Column::UserId => x.user_id.to_string(),
-                                        Column::Map => x.map.to_string(),
-                                        Column::MapId => x.map_id.to_string(),
-                                        Column::Time => x.time.to_string(),
-                                        Column::Checkpoint => x.checkpoint.to_string(),
-                                        Column::Date => chrono::Utc.timestamp_millis(x.date).format("%y/%M/%d").to_string(),
+                                        Column::ID => html! {x.id},
+                                        Column::User => html! { <Link<Route> to={Route::User {id: x.user_id}}>{x.user.clone()}</Link<Route>> },
+                                        Column::UserId => html! {x.user_id},
+                                        Column::Map => html! { <Link<Route> to={Route::Map {id: x.map_id}}>{x.map.clone()}</Link<Route>> },
+                                        Column::MapId => html! {x.map_id},
+                                        Column::Time => html! {format!("{:.3}", x.time)},
+                                        Column::Checkpoint => html! {x.checkpoint},
+                                        Column::Date => html! {chrono::Utc.timestamp_millis(x.date).format("%Y/%m/%d")},
                                     }
                                 } </td>
                             }

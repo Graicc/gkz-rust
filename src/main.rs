@@ -4,12 +4,15 @@ use yew_router::prelude::*;
 mod table;
 use table::*;
 
+mod heading;
+use heading::MonkeyHeading;
+
 #[derive(Clone, Routable, PartialEq)]
-enum Route {
+pub enum Route {
     #[at("/")]
     Home,
     #[at("/user/:id")]
-    Post { id: usize },
+    User { id: usize },
     #[at("/map/:id")]
     Map { id: usize },
 }
@@ -18,20 +21,21 @@ fn switch(route: &Route) -> Html {
     match route {
         Route::Home => html! {
             <>
-                <h1>{"GorillaKZ"}</h1>
+                <MonkeyHeading title="GorillaKZ" />
+                <h3>{"Recent Times"}</h3>
                 <Table />
             </>
         },
-        Route::Post { id } => html! {
+        Route::User { id } => html! {
             <>
-                <h1>{"GorillaKZ"}</h1>
+                <MonkeyHeading title="GorillaKZ" />
                 <h1>{id}</h1>
                 <Table />
             </>
         },
         Route::Map { id } => html! {
             <>
-                <h1>{"GorillaKZ"}</h1>
+                <MonkeyHeading title="GorillaKZ" />
                 <h1>{id}</h1>
                 <Table />
             </>
@@ -48,9 +52,9 @@ fn nav() -> Html {
         <nav class="dark">
             <div class="content nav-block">
                 <div class="nav-left">
-                    <a href="/">
-                        <img src="GKZLogo.png" width="64px"/>
-                    </a>
+                    <Link<Route> to={Route::Home}>
+                        <img src="img/GKZLogo.png" alt="GKZ Logo" width="64px"/>
+                    </Link<Route>>
                 </div>
                 <ul class="nav-right">
                     <li>
@@ -75,12 +79,12 @@ fn footer() -> Html {
         <footer class="dark">
             <div class="content nav-block">
                 <ul>
-                    <li><b><a href="/">{"GorillaKZ"}</a></b></li>
+                    <li><b><Link<Route> to={Route::Home}>{"GorillaKZ"}</Link<Route>></b></li>
                     <li><a href={GITHUB_URL}>{"Github"}</a></li>
                     <li><a href={DISCORD_URL}>{"Discord"}</a></li>
                 </ul>
                 <ul>
-                    <li><a href="/">{"Home"}</a></li>
+                    <li><Link<Route> to={Route::Home}>{"Home"}</Link<Route>></li>
                     <li><a href="/maps">{"Maps"}</a></li>
                     <li><a href="/users">{"Users"}</a></li>
                 </ul>
