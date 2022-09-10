@@ -5,11 +5,11 @@ mod table;
 use table::*;
 
 #[derive(Clone, Routable, PartialEq)]
-enum Route {
+pub enum Route {
     #[at("/")]
     Home,
     #[at("/user/:id")]
-    Post { id: usize },
+    User { id: usize },
     #[at("/map/:id")]
     Map { id: usize },
 }
@@ -22,7 +22,7 @@ fn switch(route: &Route) -> Html {
                 <Table />
             </>
         },
-        Route::Post { id } => html! {
+        Route::User { id } => html! {
             <>
                 <h1>{"GorillaKZ"}</h1>
                 <h1>{id}</h1>
