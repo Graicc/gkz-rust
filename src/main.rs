@@ -7,37 +7,71 @@ use table::*;
 mod heading;
 use heading::MonkeyHeading;
 
+
+const BASE_URL: &str = "https://api.gorillakz.com/api/";
+
 #[derive(Clone, Routable, PartialEq)]
 pub enum Route {
     #[at("/")]
     Home,
+    #[at("/users")]
+    Users,
     #[at("/user/:id")]
     User { id: usize },
+    #[at("/maps")]
+    Maps,
     #[at("/map/:id")]
     Map { id: usize },
+    #[not_found]
+    #[at("/404")]
+    NotFound,
 }
 
 fn switch(route: &Route) -> Html {
+    use map_table::*;
+    use run_table::*;
+    use user_table::*;
+
     match route {
         Route::Home => html! {
             <>
                 <MonkeyHeading title="GorillaKZ" />
                 <h3>{"Recent Times"}</h3>
-                <Table />
+                <Table<RunTableData> columns={vec![RunColumn::Date, RunColumn::Map, RunColumn::User, RunColumn::Time]} url={"runs?max=5"} />
+            </>
+        },
+        Route::Users => html! {
+            <>
+                <MonkeyHeading title="Users" />
+                <Table<UserTableData> columns={vec![UserColumn::RunCount, UserColumn::Name, UserColumn::Created]} url={"users?obsolete=true"} />
             </>
         },
         Route::User { id } => html! {
             <>
-                <MonkeyHeading title="GorillaKZ" />
+                <MonkeyHeading title="User" />
                 <h1>{id}</h1>
-                <Table />
+                // <Table<RunTableData> columns={vec![User, Map, Time]} url={"runs?max=10"} />
+            </>
+        },
+        Route::Maps => html! {
+            <>
+                <MonkeyHeading title="Maps" />
+                <Table<MapTableData> columns={vec![MapColumn::RunCount, MapColumn::Name]} url={"maps"} />
             </>
         },
         Route::Map { id } => html! {
             <>
-                <MonkeyHeading title="GorillaKZ" />
+                <MonkeyHeading title="Map" />
                 <h1>{id}</h1>
-                <Table />
+                <Table<RunTableData> columns={vec![RunColumn::Date, RunColumn::Map, RunColumn::User, RunColumn::Time]} url={"runs?max=5"} />
+            </>
+        },
+        Route::NotFound => html! {
+            <>
+                <MonkeyHeading title="Page not found :(" />
+                <h3>
+                    <Link<Route> to={Route::Home}>{"Go home"}</Link<Route>>
+                </h3>
             </>
         },
     }
@@ -58,10 +92,10 @@ fn nav() -> Html {
                 </div>
                 <ul class="nav-right">
                     <li>
-                        <a href="/maps">{"Maps"}</a>
+                        <Link<Route> to={Route::Maps}>{"Maps"}</Link<Route>>
                     </li>
                     <li>
-                        <a href="/users">{"Users"}</a>
+                        <Link<Route> to={Route::Users}>{"Users"}</Link<Route>>
                     </li>
                     <li>
                         <a href={DISCORD_URL}>{"Discord"}</a>
@@ -85,8 +119,8 @@ fn footer() -> Html {
                 </ul>
                 <ul>
                     <li><Link<Route> to={Route::Home}>{"Home"}</Link<Route>></li>
-                    <li><a href="/maps">{"Maps"}</a></li>
-                    <li><a href="/users">{"Users"}</a></li>
+                    <li><Link<Route> to={Route::Maps}>{"Maps"}</Link<Route>></li>
+                    <li><Link<Route> to={Route::Users}>{"Users"}</Link<Route>></li>
                 </ul>
                 <ul>
                     <li>{"Made with 🍌 by "}<b><a href="https://github.com/Graicc">{"Graic"}</a></b></li>
@@ -101,21 +135,17 @@ fn footer() -> Html {
 #[function_component(App)]
 fn app() -> Html {
     html! {
-        <div class="light">
-            <div id="app">
-                <div class="page">
-                    <Nav />
-                    <main>
-                        <article class="content">
-                            <BrowserRouter>
-                                <Switch<Route> render={Switch::render(switch)} />
-                            </BrowserRouter>
-                        </article>
-                    </main>
-                    <br />
-                    <Footer />
-                </div>
-            </div>
+        <div id="app" class="light page">
+            <BrowserRouter>
+                <Nav />
+                <main>
+                    <article class="content">
+                        <Switch<Route> render={Switch::render(switch)} />
+                    </article>
+                </main>
+                <br />
+                <Footer />
+            </BrowserRouter>
         </div>
     }
 }
