@@ -1,7 +1,7 @@
 name: Github Pages
 on: 
   push:
-    branches: [master,main,ci]
+    branches: [master,main]
     paths-ignore:
       - '**.yml'
       - '!.github/workflows/pages.yml'
