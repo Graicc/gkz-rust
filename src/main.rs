@@ -7,6 +7,11 @@ use table::*;
 mod heading;
 use heading::MonkeyHeading;
 
+mod user;
+use user::User;
+
+mod map;
+use map::Map;
 
 const BASE_URL: &str = "https://api.gorillakz.com/api/";
 
@@ -47,11 +52,7 @@ fn switch(route: &Route) -> Html {
             </>
         },
         Route::User { id } => html! {
-            <>
-                <MonkeyHeading title="User" />
-                <h1>{id}</h1>
-                // <Table<RunTableData> columns={vec![User, Map, Time]} url={"runs?max=10"} />
-            </>
+            <User id={*id}/>
         },
         Route::Maps => html! {
             <>
@@ -60,11 +61,7 @@ fn switch(route: &Route) -> Html {
             </>
         },
         Route::Map { id } => html! {
-            <>
-                <MonkeyHeading title="Map" />
-                <h1>{id}</h1>
-                <Table<RunTableData> columns={vec![RunColumn::Date, RunColumn::Map, RunColumn::User, RunColumn::Time]} url={"runs?max=5"} />
-            </>
+            <Map id={*id}/>
         },
         Route::NotFound => html! {
             <>

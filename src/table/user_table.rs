@@ -8,11 +8,11 @@ use crate::{table::*, Route};
 
 #[derive(Clone, PartialEq, Deserialize, Debug)]
 pub struct UserTableData {
-    id: usize,
-    name: String,
+    pub id: usize,
+    pub name: String,
     #[serde(rename = "runCount")]
-    run_count: usize,
-    created: i64,
+    pub run_count: usize,
+    pub created: i64,
 }
 
 #[derive(PartialEq)]

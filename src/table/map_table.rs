@@ -7,10 +7,10 @@ use crate::{table::*, Route};
 
 #[derive(Clone, PartialEq, Deserialize, Debug)]
 pub struct MapTableData {
-    id: usize,
-    name: String,
+    pub id: usize,
+    pub name: String,
     #[serde(rename = "runCount")]
-    run_count: usize,
+    pub run_count: usize,
 }
 
 #[derive(PartialEq)]

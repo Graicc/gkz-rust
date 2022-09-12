@@ -1,6 +1,6 @@
 use reqwasm::http::Request;
 use serde::de::DeserializeOwned;
-use yew::{html, Component, Context, Html, Properties, virtual_dom::AttrValue};
+use yew::{html, Component, Context, Html, Properties, virtual_dom::AttrValue, Callback};
 use std::fmt;
 
 use crate::BASE_URL;
@@ -20,6 +20,7 @@ pub trait TableData {
 }
 
 pub enum TableMessage<T> where T: TableData {
+    Get,
     Response(Result<Vec<T>, reqwasm::Error>),
 }
 
@@ -33,6 +34,7 @@ pub struct Table<T> where T: TableData {
     // columns: Vec<Column>,
     data: Option<Result<Vec<T>, reqwasm::Error>>,
     url: AttrValue,
+    get_callback: Callback<()>,
 }
 
 impl<T> Component for Table<T> where T: TableData + DeserializeOwned + 'static {
@@ -43,26 +45,33 @@ impl<T> Component for Table<T> where T: TableData + DeserializeOwned + 'static {
         let props = ctx.props();
         let url = props.url.clone();
 
-        let new = Self { data: None, url: url.clone() };
+        let callback = ctx.link().callback(|_| TableMessage::Get);
 
-        let callback = ctx.link().callback(|data| TableMessage::Response(data));
+        let new = Self { data: None, url: url.clone(), get_callback: callback };
 
-        wasm_bindgen_futures::spawn_local(async move {
-            let message = async {
-                let res = Request::get(&format!("{BASE_URL}{url}")).send().await?;
-            
-                res.json::<Vec<T>>().await
-            }.await;
-
-            callback.clone().emit(message);
-        });
+        new.get_callback.emit(());
 
         new
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         use TableMessage::*;
         match msg {
+            Get => {
+                let callback = ctx.link().callback(|data| TableMessage::Response(data));
+                let url = ctx.props().url.clone();
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let message = async {
+                        let res = Request::get(&format!("{BASE_URL}{url}")).send().await?;
+                    
+                        res.json::<Vec<T>>().await
+                    }.await;
+
+                    callback.clone().emit(message);
+                });
+                false
+            },
             Response(data) => {
                 self.data = Some(data);
                 true
@@ -76,17 +85,7 @@ impl<T> Component for Table<T> where T: TableData + DeserializeOwned + 'static {
         if url != self.url {
             self.url = url.clone();
 
-            let callback = ctx.link().callback(|data| TableMessage::Response(data));
-
-            wasm_bindgen_futures::spawn_local(async move {
-                let message = async {
-                    let res = Request::get(&format!("{BASE_URL}{url}")).send().await?;
-                
-                    res.json::<Vec<T>>().await
-                }.await;
-
-                callback.clone().emit(message);
-            });
+            self.get_callback.emit(());
         }
 
         true
