@@ -153,6 +153,10 @@ nav {
         padding: 16px;
     }
 
+main {
+    margin-bottom: 10px;
+}
+
 .content {
     /*padding-top: 1.1rem;*/
     /*display: block;*/
