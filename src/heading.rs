@@ -25,7 +25,7 @@ mod fitty {
     }
 
     #[wasm_bindgen_duck_type]
-    struct FittyResult {
+    pub struct FittyResult {
         element: Element,
         fit: Function,
         unsubscribe: Function,

@@ -16,5 +16,4 @@ chrono = "0.4.22"
 yew-router = "0.16.0"
 js-sys = "0.3.60"
 serde-wasm-bindgen = "0.4.3"
-wasm_bindgen_duck_type = { git="https://github.com/Graicc/wasm_bindgen_duck_type" }
-# wasm_bindgen_duck_type = { path = "../wasm_bindgen_duck_type" }
+wasm_bindgen_duck_type = "0.1.0"
