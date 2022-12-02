@@ -1,12 +1,13 @@
 # GKZ-Rust
 
 ## What
-A port of https://gorillakz.com/ from C# + Blazor WebAssembly to Rust + Yew.
+A rewrite of the original GorillaKZ website in Rust + Yew from C# + Blazor WebAssembly.
 
 ## Where
-https://graicc.github.io/gkz-rust/
+https://gorillakz.com/
 
 ## Why
 * Performance improvements (Blazor WASM is slow)
 * Learn rust (rust is nice)
 * Learn wasm (js is not nice)
+* Static hosting on github pages
